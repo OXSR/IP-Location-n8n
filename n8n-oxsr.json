@@ -1,0 +1,241 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "tu tarea es devolver esa respuesta json en formato html, añadele de titulo \"IP Location\" usa html tabla (td,tr y th) NO uses nada de estilo css, quita lo de (```html) y abajo del todo como footer añade \"By OXSR / VWolf\"",
+              "role": "system"
+            },
+            {
+              "content": "=JSON DATA:\n {{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        40,
+        540
+      ],
+      "id": "4679b940-233d-4d89-ab74-7145f703641c",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "o73nMUZuyLwM0Egf",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        620,
+        540
+      ],
+      "id": "97b5f43e-ad64-4b7e-a5f2-6d69e3b8c021",
+      "name": "Responder API"
+    },
+    {
+      "parameters": {
+        "url": "=http://ip-api.com/php/{{$json[\"params\"][\"ip\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        540
+      ],
+      "id": "c4b7ff94-d4db-4586-b500-9b4e7889ffe4",
+      "name": "IP API Externa"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acb59a20-7c62-4c5f-ab74-5da80b6a3440",
+              "name": "message.content",
+              "value": "={{ $json.message.content }}\n\n<style>\n:root {\n  --primary-color: #000;\n  --background-color: #fff;\n  --text-color: #000;\n  --border-color: #ccc;\n}\n\n* {\n  box-sizing: border-box;\n}\n\nbody {\n  font-family: Helvetica, Arial, sans-serif;\n  background-color: var(--background-color);\n  margin: 0;\n  padding: 20px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n}\n\ntable {\n  width: 90%;\n  max-width: 700px;\n  border-collapse: collapse;\n  background: var(--background-color);\n  border: 1px solid var(--border-color);\n  border-radius: 6px;\n  overflow: hidden;\n  margin: 0 auto;\n}\n\nth, td {\n  padding: 12px 15px;\n  text-align: left;\n  border-bottom: 1px solid var(--border-color);\n}\n\nth {\n  background: var(--primary-color);\n  color: var(--background-color);\n  text-transform: uppercase;\n  letter-spacing: 0.05em;\n  font-size: 0.9rem;\n}\n\ntr:nth-child(even) {\n  background-color: #f7f7f7;\n}\n\ntr:hover {\n  background-color: #f0f0f0;\n  cursor: pointer;\n}\n\ntd:first-child {\n  font-weight: bold;\n  color: var(--text-color);\n}\n\nfooter {\n  margin-top: 20px;\n  font-size: 0.9rem;\n  color: var(--text-color);\n  text-align: center;\n}\na{\ncolor:blue !important;\n}\n</style>\n\n  <script>\n    document.addEventListener('DOMContentLoaded', () => {\n      const cells = document.querySelectorAll('td');\n\n      cells.forEach(cell => {\n        cell.addEventListener('click', function() {\n          const cellValue = this.textContent.trim();\n          navigator.clipboard.writeText(cellValue)\n            .then(() => {\n              alert(`Copiado: ${cellValue}`);\n            })\n            .catch(err => {\n              console.error('Error al copiar el texto: ', err);\n            });\n        });\n      });\n    });\ndocument.addEventListener('DOMContentLoaded', () => {\n  const footer = document.querySelector('footer');\n  const link = document.createElement('a');\n  link.href = 'https://github.com/oxsr';\n  link.textContent = footer.textContent.trim();\n  link.style.textDecoration = 'none';\n  link.style.color = 'inherit';\n  footer.innerHTML = '';\n  footer.appendChild(link);\n});\n\n  </script>\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        540
+      ],
+      "id": "efaf1d85-b28a-4411-80ba-5e63750667f0",
+      "name": "CSS Y JS"
+    },
+    {
+      "parameters": {
+        "content": "## Webhook\nActivo un webhook para recibir solicitudes en mi URL",
+        "height": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        440
+      ],
+      "id": "1ad611c2-6b55-4bf4-8e38-7a94ae3b56ff",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## \nREQ A API EXTERNA",
+        "height": 200,
+        "width": 180,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        480
+      ],
+      "id": "9f5c7982-de83-4ddf-a5a0-d2779e31d581",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## \nChatGPT procesa datos JSON",
+        "height": 200,
+        "width": 300,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        480
+      ],
+      "id": "bc75b5ed-6833-4b87-a547-0686bcbb0ca8",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## \nModifico campos, añado CSS Y JS",
+        "height": 220,
+        "width": 180,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        360,
+        480
+      ],
+      "id": "b19c33b1-27c1-446f-a0ed-92f7f7ae14df",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## \nResponder al usuario",
+        "height": 220,
+        "width": 170,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        580,
+        480
+      ],
+      "id": "3735a413-f5f7-464b-92aa-694f8e0aaef1",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "path": "cecf11d1-e441-4239-83a9-f5ef9badb6ec/:ip",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        540
+      ],
+      "id": "2ad3d1e6-d029-482b-8c46-501b2e56631e",
+      "name": "Webhook",
+      "webhookId": "cecf11d1-e441-4239-83a9-f5ef9badb6ec"
+    }
+  ],
+  "connections": {
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "CSS Y JS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder API": {
+      "main": [
+        []
+      ]
+    },
+    "IP API Externa": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSS Y JS": {
+      "main": [
+        [
+          {
+            "node": "Responder API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IP API Externa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "b9d75b25ce16ed236dcd6d42bba853e02bca2f882ef01c213e114887c70f0184"
+  }
+}
